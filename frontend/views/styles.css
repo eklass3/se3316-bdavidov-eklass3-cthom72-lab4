@@ -1,0 +1,9 @@
+/* General CSS for body content */
+body {
+    background-color: rgb(195, 32, 32);
+    font-family: 'Courier New', Courier, monospace;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    display: flex;
+}
