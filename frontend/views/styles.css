@@ -12,8 +12,9 @@ body {
     border-radius: 5px;
     font-size: medium;
     font-family: 'Courier New', Courier, monospace;
-    background: rgb(29,213,75);
-    background: linear-gradient(90deg, rgba(29,213,75,1) 35%, rgba(42,238,121,1) 100%);
+    color: white;
+    background: rgb(127, 4, 133);
+    background: linear-gradient(90deg, rgb(128, 6, 110) 35%, rgb(155, 11, 138) 100%);
 }
 
 .text-input {
@@ -22,6 +23,60 @@ body {
     border-radius: 15px;
     padding-left: 5px;
     padding-right: 5px;
+    width: 300px;
+}
+
+.checkbox {
+    height: 25px;
+    width: 25px;
+}
+
+.row {
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+}
+
+.track-box {
+    width: 95%;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background: rgb(127, 4, 133);
+    background: linear-gradient(90deg, rgb(128, 6, 110) 35%, rgb(155, 11, 138) 100%);
+    border-radius: 10px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.track-box p {
+    color: white;
+}
+
+.album-box {
+    width: 95%;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background: rgb(127, 4, 133);
+    background: linear-gradient(90deg, rgb(128, 6, 110) 35%, rgb(155, 11, 138) 100%);
+    border-radius: 10px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.album-box p {
+    color: white;
 }
 
 #line {
@@ -83,4 +138,19 @@ body {
     height: 100%;
     background-color: black;
     width: 2px;
+}
+
+#filter {
+    margin-top: 15px;
+    margin-left: 15px;
+    margin-bottom: 15px;
+}
+
+#filter-row {
+    margin-top: 15px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
