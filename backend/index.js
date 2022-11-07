@@ -47,7 +47,7 @@ const app = express();
     app.get('/api/tracks', (req, res) => {
         let search = req.query.track_title;
     
-        connection.query('SELECT track_id FROM tracks WHERE track_title LIKE \'%?%\' OR album_title LIKE \'%\?%\' LIMIT 10;',[search, search], function(error, results, fields) {
+        connection.query('SELECT track_id FROM tracks WHERE track_title LIKE ? OR album_title LIKE ? LIMIT 10;',['%' + search + '%', '%' + search + '%'], function(error, results, fields) {
             if (error) throw error;
         res.send(JSON.stringify(results));
         });
@@ -58,7 +58,7 @@ const app = express();
         let search = req.query.artist_name;
         console.log(search);
 
-        connection.query('SELECT artist_id FROM tracks WHERE artist_name LIKE \'%?%\' LIMIT 10;',[search], function(error, results, fields) {
+        connection.query('SELECT artist_id FROM artists WHERE artist_name LIKE ? LIMIT 10;',['%' + search + '%'], function(error, results, fields) {
             if (error) throw error;
         res.send(JSON.stringify(results));
         });
