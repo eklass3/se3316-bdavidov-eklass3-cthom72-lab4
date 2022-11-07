@@ -1,8 +1,67 @@
 const btnSearch = document.getElementById("btnSearch").addEventListener("click", () => onSearch());
 const searchColumn = document.getElementById("searchColumn");
+const rdArtist = document.getElementById("rdArtist").addEventListener("change", () => onFilter(1));
+const rdAlbum = document.getElementById("rdAlbum").addEventListener("change", () => onFilter(2));;
+const rdTrack = document.getElementById("rdTrack").addEventListener("change", () => onFilter(3));
+const rdLength = document.getElementById("rdLength").addEventListener("change", () => onFilter(4));
 
 let searchedTracks = [];
 let searchedArtists = [];
+
+function onFilter(rbCode) {
+    switch (rbCode) {
+        case 1:
+            searchedTracks.sort(function(a,b) {
+                let txtA = a.artist_name.toUpperCase();
+                let txtB = b.artist_name.toUpperCase();
+                return (txtA < txtB) ? -1 : (txtA > txtB) ? 1 : 0;
+            });
+
+            searchedArtists.sort(function(a,b) {
+                let txtA = a.artist_name.toUpperCase();
+                let txtB = b.artist_name.toUpperCase();
+                return (txtA < txtB) ? -1 : (txtA > txtB) ? 1 : 0;
+            });
+
+            break;
+        case 2:
+            searchedTracks.sort(function(a,b) {
+                let txtA = a.album_title.toUpperCase();
+                let txtB = b.album_title.toUpperCase();
+                return (txtA < txtB) ? -1 : (txtA > txtB) ? 1 : 0;
+            });
+
+            break;
+        case 3:
+
+            searchedTracks.sort(function(a,b) {
+                let txtA = a.track_title.toUpperCase();
+                let txtB = b.track_title.toUpperCase();
+                return (txtA < txtB) ? -1 : (txtA > txtB) ? 1 : 0;
+            });
+
+            break;
+        case 4:
+
+            searchedTracks.sort(function(a,b) {
+                let txtA = a.track_duration.toUpperCase();
+                let txtB = b.track_duration.toUpperCase();
+                return (txtA < txtB) ? -1 : (txtA > txtB) ? 1 : 0;
+            });
+            break;
+        
+    }
+
+    clearChildElements(searchColumn);
+    searchedTracks.forEach(track => {
+        const div = createTrackDOM(track);
+        searchColumn.appendChild(div);
+    });
+    searchedArtists.forEach(artist => {
+        const div = createArtistDOM(artist);
+        searchColumn.appendChild(div);
+    });
+}
 
 function onSearch() {
     searchedTracks = [];
@@ -17,10 +76,10 @@ function onSearch() {
           
         clearChildElements(searchColumn);
 
-        const hTitle = document.createElement('h3');
-        const txtTitle = document.createTextNode("Results:");
-        hTitle.appendChild(txtTitle);
-        searchColumn.appendChild(hTitle);
+        // const hTitle = document.createElement('h3');
+        // const txtTitle = document.createTextNode("Results:");
+        // hTitle.appendChild(txtTitle);
+        // searchColumn.appendChild(hTitle);
 
         for (let i = 0; i < searchResults.length; i++) {
             fetch("http://localhost:3000/api/tracks/" + searchResults[i].track_id)
