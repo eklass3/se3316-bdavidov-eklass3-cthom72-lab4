@@ -1,5 +1,7 @@
 const btnSearch = document.getElementById("btnSearch").addEventListener("click", () => onSearch());
+const btnCreate = document.getElementById("btnCreateList").addEventListener("click", () => onCreateList());
 const searchColumn = document.getElementById("searchColumn");
+const listColumn = document.getElementById("listColumn");
 const rdArtist = document.getElementById("rdArtist").addEventListener("change", () => onFilter(1));
 const rdAlbum = document.getElementById("rdAlbum").addEventListener("change", () => onFilter(2));;
 const rdTrack = document.getElementById("rdTrack").addEventListener("change", () => onFilter(3));
@@ -7,6 +9,83 @@ const rdLength = document.getElementById("rdLength").addEventListener("change", 
 
 let searchedTracks = [];
 let searchedArtists = [];
+let listList = [];
+
+getLists()
+.then(data => data.json())
+.then(lists => {
+   
+    for (let i = 0; i < lists.length; i++) {
+        listList.push({list_name: lists[i].list_name, tracks: []});
+
+        getTracks(lists[i].list_name)
+        .then(data => data.json())
+        .then(tracks => {
+            console.log(tracks);
+
+            for (let j = 0; j < tracks.length; j++) {
+                console.log(tracks[j].track_id);
+                getTrackDetails(tracks[j].track_id)
+                .then(data => data.json())
+                .then(track_details => {
+                    console.log(track_details);
+                    if (track_details[0] !== undefined)
+                        listList[i].tracks.push(track_details[0]);
+
+                    if (j+1 === tracks.length) {
+                        clearChildElements(listColumn);
+
+                        for (let k = 0; k < listList.length; k++) {
+                            const div = createListDOM(listList[k], listList[k].tracks);
+                            listColumn.appendChild(div);
+                        }
+                    }
+                });
+            }
+        });
+    }
+});
+
+async function getLists() {
+    return await fetch('http://localhost:3000/api/lists');
+}
+
+async function getTracks(list_name) {
+    const query = decodeURIComponent(`http://localhost:3000/api/lists/tracks/${list_name}`);
+    console.log(query);
+    return await fetch(query);
+}
+
+async function getTrackDetails(track_id) {
+    return await fetch('http://localhost:3000/api/tracks/' + track_id);
+}
+
+function onCreateList() {
+    const inputText =  document.getElementById("inputListName").value;
+
+    console.log("Button pressed");
+
+    fetch('http://localhost:3000/api/lists', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'list_name': inputText})
+    }).then(res => {
+        if (res.status === 201) {
+            listList.push({list: {list_name: inputText}, tracks: []});
+            console.log("Success");
+
+            const div = createListDOM({list_name: inputText}, []);
+            listColumn.appendChild(div);
+        }
+    })
+    .catch(function (error) {
+
+    });
+
+}
 
 function onFilter(rbCode) {
     switch (rbCode) {
@@ -76,11 +155,6 @@ function onSearch() {
           
         clearChildElements(searchColumn);
 
-        // const hTitle = document.createElement('h3');
-        // const txtTitle = document.createTextNode("Results:");
-        // hTitle.appendChild(txtTitle);
-        // searchColumn.appendChild(hTitle);
-
         for (let i = 0; i < searchResults.length; i++) {
             fetch("http://localhost:3000/api/tracks/" + searchResults[i].track_id)
              .then((response) => response.json())
@@ -121,6 +195,46 @@ function onSearch() {
     });
 
 }   
+
+function createListDOM(list, tracks) {
+    console.log(list);
+    const div = document.createElement('div');
+    div.setAttribute("id", "content-box");
+    const input = document.createElement('input');
+    input.setAttribute("class", "checkbox");
+    input.setAttribute("type", "checkbox");
+    input.setAttribute("id", "cb " + list.list_id);
+
+    const divRow = document.createElement('div');
+    divRow.setAttribute("class", "row");
+    const hListName = document.createElement('h3');
+    const txtListName = document.createTextNode(list.list_name);
+    hListName.appendChild(txtListName);
+    divRow.appendChild(hListName);
+
+    div.appendChild(input);
+    div.appendChild(divRow);
+
+    tracks.forEach(track => {
+        const div2 = document.createElement('div');
+        div2.setAttribute("class", "track-box");
+    
+        const pDetails = document.createElement('p');
+        const txtDetails = document.createTextNode(track.track_title + " - " + track.artist_name + " - " + track.album_title);
+        pDetails.appendChild(txtDetails);
+    
+        const pTime = document.createElement('p');
+        const txtTime = document.createTextNode(track.track_duration);
+        pTime.appendChild(txtTime);
+    
+        div2.appendChild(pDetails);
+        div2.appendChild(pTime);
+
+        div.appendChild(div2);
+    });
+
+    return div;
+}
 
 function createTrackDOM(track) {
     const div = document.createElement('div');
