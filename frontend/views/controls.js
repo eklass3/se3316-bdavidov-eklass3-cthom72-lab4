@@ -23,6 +23,7 @@ addButtonVisibility();
 loadLists();
 
 function loadLists() {
+    listList = [];
     getLists()
     .then(data => data.json())
     .then(lists => {
@@ -48,17 +49,18 @@ function loadLists() {
             });
         }
     });
-}
 
-clearChildElements(listColumn);
+    clearChildElements(listColumn);
     
-setTimeout(()=>{
-    console.log("LENGTH " + listList.length);
-for (let k = 0; k < listList.length; k++) {
-    const div = createListDOM(listList[k], listList[k].tracks);
-    listColumn.appendChild(div);
+    setTimeout(()=>{
+        console.log("ListList " + JSON.stringify(listList));
+    for (let k = 0; k < listList.length; k++) {
+        const div = createListDOM(listList[k], listList[k].tracks);
+        listColumn.appendChild(div);
+    }
+    },500);
+
 }
-},500);
 
 async function getLists() {
     return await fetch('http://localhost:3000/api/lists');
@@ -123,21 +125,14 @@ function onAdd() {
 
             clearChildElements(searchColumn);
 
-            clearChildElements(listColumn);
-    
-            getLists();
-    setTimeout(()=>{
-        console.log("LENGTH " + listList.length);
-        for (let k = 0; k < listList.length; k++) {
-            const div = createListDOM(listList[k], listList[k].tracks);
-            listColumn.appendChild(div);
-        }
-        },500);
+            loadLists();
 
             searchedTracks.forEach(track => {
                 const div = createTrackDOM(track);
                 searchColumn.appendChild(div);
             });
+
+            addButtonVisibility();
            
         }
     })
@@ -161,8 +156,8 @@ function onFilterList(rbCode) {
         case 1:
 
             for (let i = 0; i < listList.length; i++) {
-                if (listList.tracks.length > 0) {
-                    listList.tracks.sort(function(a,b) {
+                if (listList[i].tracks.length > 0) {
+                    listList[i].tracks.sort(function(a,b) {
                         let txtA = a.artist_name.toUpperCase();
                         let txtB = b.artist_name.toUpperCase();
                         return (txtA < txtB) ? -1 : (txtA > txtB) ? 1 : 0;
@@ -174,8 +169,8 @@ function onFilterList(rbCode) {
         case 2:
 
             for (let i = 0; i < listList.length; i++) {
-                if (listList.tracks.length > 0) {
-                    listList.tracks.sort(function(a,b) {
+                if (listList[i].tracks.length > 0) {
+                    listList[i].tracks.sort(function(a,b) {
                         let txtA = a.album_title.toUpperCase();
                         let txtB = b.album_title.toUpperCase();
                         return (txtA < txtB) ? -1 : (txtA > txtB) ? 1 : 0;
@@ -187,8 +182,8 @@ function onFilterList(rbCode) {
         case 3:
 
             for (let i = 0; i < listList.length; i++) {
-                if (listList.tracks.length > 0) {
-                    listList.tracks.sort(function(a,b) {
+                if (listList[i].tracks.length > 0) {
+                    listList[i].tracks.sort(function(a,b) {
                         let txtA = a.track_title.toUpperCase();
                         let txtB = b.track_title.toUpperCase();
                         return (txtA < txtB) ? -1 : (txtA > txtB) ? 1 : 0;
@@ -200,8 +195,8 @@ function onFilterList(rbCode) {
         case 4:
 
             for (let i = 0; i < listList.length; i++) {
-                if (listList.tracks.length > 0) {
-                    listList.tracks.sort(function(a,b) {
+                if (listList[i].tracks.length > 0) {
+                    listList[i].tracks.sort(function(a,b) {
                         let txtA = a.track_duration.toUpperCase();
                         let txtB = b.track_duration.toUpperCase();
                         return (txtA < txtB) ? -1 : (txtA > txtB) ? 1 : 0;
@@ -214,10 +209,11 @@ function onFilterList(rbCode) {
     }
 
     clearChildElements(listColumn);
-    listColumn.forEach(list => {
-        const div = createTrackDOM(list);
+
+    for (let k = 0; k < listList.length; k++) {
+        const div = createListDOM(listList[k], listList[k].tracks);
         listColumn.appendChild(div);
-    });
+    }
 }
 
 function onFilterSearch(rbCode) {
@@ -340,11 +336,14 @@ function onTrackSelected(track_id) {
     addButtonVisibility();
 }
 
-function onListSelected(list_name) {
+function onListSelected(list_name, input) {
     if (selectedList === list_name) {
         selectedList = "";
-    } else {
+    } else if (selectedList === "") {
         selectedList = list_name;
+    } else {
+        alert("You can only select one list!");
+        input.checked = false;
     }
 
     addButtonVisibility();
@@ -355,7 +354,7 @@ function createListDOM(list, tracks) {
     const div = document.createElement('div');
     div.setAttribute("id", "content-box");
     const input = document.createElement('input');
-    input.addEventListener('change', () => onListSelected(list.list_name));
+    input.addEventListener('change', () => onListSelected(list.list_name, input));
     input.setAttribute("class", "checkbox");
     input.setAttribute("type", "checkbox");
     input.setAttribute("id", "cb " + list.list_name);
