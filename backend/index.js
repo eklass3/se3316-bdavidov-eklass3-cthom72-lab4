@@ -34,7 +34,7 @@ const app = express();
     app.get('/api/tracks/:id', (req, res) => {
         let track_id = req.params.id;
         if (isNumeric(track_id)) {//Santization
-            connection.query('SELECT album_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration, track_genres, track_number, track_title FROM tracks WHERE track_id = ?', [track_id], function(error, results, fields) {
+            connection.query('SELECT album_id, track_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration, track_genres, track_number, track_title FROM tracks WHERE track_id = ?', [track_id], function(error, results, fields) {
                 if (error) throw error;
             res.send(JSON.stringify(results));
             });
@@ -158,7 +158,7 @@ const app = express();
         connection.query('SELECT * FROM saved_tracks LEFT JOIN lists ON saved_tracks.list_name = lists.list_name UNION SELECT * FROM saved_tracks RIGHT JOIN lists ON saved_tracks.list_name = lists.list_name', function(error, results, fields) {
             if (error) throw error;
             
-            
+
 
             res.send(JSON.stringify(results));
         });

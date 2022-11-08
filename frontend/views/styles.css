@@ -26,6 +26,23 @@ body {
     width: 300px;
 }
 
+.float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	background: rgb(127, 4, 133);
+    background: linear-gradient(90deg, rgb(128, 6, 110) 35%, rgb(155, 11, 138) 100%);
+	color:#FFF;
+	border-radius:50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
 .checkbox {
     height: 25px;
     width: 25px;
