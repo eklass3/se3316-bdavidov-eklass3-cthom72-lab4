@@ -115,7 +115,7 @@ const app = express();
         });
     });
 
-    //Get list of track ids in a list list. Backend requirement #8. Sanitized through SQL param input.
+    //Get list of track ids in a list. Backend requirement #8. Sanitized through SQL param input.
     app.get('/api/lists/tracks/:list', jsonParser, (req, res) => {
         let list_name = req.params.list;
 
@@ -142,25 +142,10 @@ const app = express();
                     connection.query('DELETE FROM saved_tracks WHERE list_name = ?',[list_name], function(error, results, fields) {
                         if (error) throw error;
 
-                        res.status(204);
+                        res.status(204).send("Success Deleting");
                     });
                 });
             }
-        });
-    });
-
-    //Gets all saved tracks. Nota requirement
-    app.get('/api/saved_tracks', jsonParser, (req, res) => {
-        let list_name = req.params.list;
-
-        console.log(list_name);
-        
-        connection.query('SELECT * FROM saved_tracks LEFT JOIN lists ON saved_tracks.list_name = lists.list_name UNION SELECT * FROM saved_tracks RIGHT JOIN lists ON saved_tracks.list_name = lists.list_name', function(error, results, fields) {
-            if (error) throw error;
-            
-
-
-            res.send(JSON.stringify(results));
         });
     });
 

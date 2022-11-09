@@ -43,6 +43,15 @@ body {
 	box-shadow: 2px 2px 3px #999;
 }
 
+.h-scroll {
+    direction:rtl;
+    width: 100%;
+}
+
+.h-scroll-div {
+    width: 100%;
+}
+
 .checkbox {
     height: 25px;
     width: 25px;
