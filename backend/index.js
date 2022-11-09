@@ -121,7 +121,7 @@ const app = express();
 
         console.log(list_name);
         
-        connection.query('SELECT * FROM saved_tracks WHERE list_name = ?',[decodeURI(list_name)], function(error, results, fields) {
+        connection.query('SELECT * FROM saved_tracks WHERE list_name = ?',[decodeURIComponent(list_name)], function(error, results, fields) {
             if (error) throw error;
             
             res.send(JSON.stringify(results));
