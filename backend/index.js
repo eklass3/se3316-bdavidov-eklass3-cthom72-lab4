@@ -3,36 +3,37 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const { body, check } = require('express-validator');
 const connection = initDB(mysql);
-const { initializeApp } = require ("firebase/app");
-const { getAuth, createUserWithEmailAndPassword } = require("firebase/auth");
+const { requiresAuth } = require('express-openid-connect'); //include this middleware for ensure a protected route (requires authentication)
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-    apiKey: "AIzaSyD4EfZ5jmTZyEduwIv68Lwc0itcKu90pGg",
-    authDomain: "se3316-cthom72-lab4.firebaseapp.com",
-    projectId: "se3316-cthom72-lab4",
-    storageBucket: "se3316-cthom72-lab4.appspot.com",
-    messagingSenderId: "543881053605",
-    appId: "1:543881053605:web:712fc7262b10565677544c",
-    measurementId: "G-LK7E6NTSBS",
-    databaseURL: "https://se3316-cthom72-lab4-default-rtdb.firebaseio.com",
-};
-
-// Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-
-// Initiaize Firebase Authentication and produce a reference
-const auth = getAuth(firebaseApp);
-
-
-
-const jsonParser = bodyParser.json();
 
 const app = express();
+
+//the following code is directly copied from auth0.com under the management portal. It is to setup the router for the authentication schema.
+const { auth } = require('express-openid-connect');
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'a long, randomly-generated string stored in env',
+  baseURL: 'http://localhost:3000',
+  clientID: 'HSJA1S6qiFjE8gem8UWix4xjZc8m5eyQ',
+  issuerBaseURL: 'https://dev-dzly2px62k6tkpb1.us.auth0.com'
+};
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+
+app.get('/profile', requiresAuth(), (req, res) => {
+    res.send(JSON.stringify(req.oidc.user));
+});
+
+
+// req.isAuthenticated is provided from the auth router
+app.get('/', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
+//parser for JSON
+const jsonParser = bodyParser.json();
 
     //Get genres enpoint. Backend requirement #1
     app.get('/api/genres', (req, res) => {
