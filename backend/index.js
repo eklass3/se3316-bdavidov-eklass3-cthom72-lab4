@@ -2,8 +2,33 @@ const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const { body, check } = require('express-validator');
-
 const connection = initDB(mysql);
+const { initializeApp } = require ("firebase/app");
+const { getAuth, createUserWithEmailAndPassword } = require("firebase/auth");
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyD4EfZ5jmTZyEduwIv68Lwc0itcKu90pGg",
+    authDomain: "se3316-cthom72-lab4.firebaseapp.com",
+    projectId: "se3316-cthom72-lab4",
+    storageBucket: "se3316-cthom72-lab4.appspot.com",
+    messagingSenderId: "543881053605",
+    appId: "1:543881053605:web:712fc7262b10565677544c",
+    measurementId: "G-LK7E6NTSBS",
+    databaseURL: "https://se3316-cthom72-lab4-default-rtdb.firebaseio.com",
+};
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+
+// Initiaize Firebase Authentication and produce a reference
+const auth = getAuth(firebaseApp);
+
+
 
 const jsonParser = bodyParser.json();
 
@@ -226,9 +251,9 @@ function initDB(sql) {
    
     let connection = sql.createConnection({
         host: 'localhost',
-        user: 'root',
-        password: 'password',//DB Password
-        database: 'music'
+        user: 'testing',
+        password: '',//DB Password
+        database: 'music',
     });
     
     connection.connect();
