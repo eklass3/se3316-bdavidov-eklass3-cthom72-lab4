@@ -1,36 +1,59 @@
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const { body, check } = require('express-validator');
+const { body } = require('express-validator');
 const connection = initDB(mysql);
-const { requiresAuth } = require('express-openid-connect'); //include this middleware for ensure a protected route (requires authentication)
-
+const { auth, requiresAuth, claimEquals, claimIncludes, claimCheck} = require('express-openid-connect'); //include this middleware for ensure a protected route (requires authentication)
 
 const app = express();
 
 //the following code is directly copied from auth0.com under the management portal. It is to setup the router for the authentication schema.
-const { auth } = require('express-openid-connect');
 const config = {
   authRequired: false,
   auth0Logout: true,
   secret: 'a long, randomly-generated string stored in env',
   baseURL: 'http://localhost:3000',
   clientID: 'HSJA1S6qiFjE8gem8UWix4xjZc8m5eyQ',
-  issuerBaseURL: 'https://dev-dzly2px62k6tkpb1.us.auth0.com'
+  issuerBaseURL: 'https://dev-dzly2px62k6tkpb1.us.auth0.com',
+  clientSecret: 'aseryw83ydsbeo874tyi36gfa9673gviuyiuw3i4uyw37r',
 };
-// auth router attaches /login, /logout, and /callback routes to the baseURL
+
 app.use(auth(config));
-
-
-app.get('/profile', requiresAuth(), (req, res) => {
-    res.send(JSON.stringify(req.oidc.user));
+// auth router attaches /login, /logout, and /callback routes to the baseURL ... auth also creates a JWT using auth0
+//app.use(auth(config));
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
 
+// require authentication for all protected and administrator routes... will redirect to login
+// because the user is forced to login for these paths, the oidc object (req.oidc) will have an accessToken property (JWT)
+// therefore, all protected and admin routes check the token for authorization
+app.use('/api/protected',requiresAuth());
+app.use('/api/admin',requiresAuth());
 
-// req.isAuthenticated is provided from the auth router
-app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-});
+//sample public endpoint
+app.get('/api/public',(req,res)=>{
+    console.log("/api/public was accessed")
+    res.send({
+        msg: 'You called the public endpoint!'
+    });
+})
+
+//sample protected endpoint (includes accessToken middleware)
+app.get('/api/protected',(req,res)=>{
+    res.send({
+        msg: "You called a protected endpoint!"
+    })
+})
+
+//sample administrative level protected endpoint
+app.get('/api/admin',(req,res) => {
+    res.send({
+        msg: "You called the administrator endpoint!"
+    })
+})
 
 //parser for JSON
 const jsonParser = bodyParser.json();

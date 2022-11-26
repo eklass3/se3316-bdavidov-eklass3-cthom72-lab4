@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-let backend = require('./backend/index');
+let backend = require('./index');
 
 app.use(backend, function (req, res, next) {
     console.log('Time:', Date.now());
