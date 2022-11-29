@@ -1,38 +1,37 @@
-const express = require('express');
+var express = require('express');
+var app = express();
+var jwt = require('express-jwt');
+var jwks = require('jwks-rsa');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const { body } = require('express-validator');
 const connection = initDB(mysql);
-const { auth, requiresAuth, claimEquals, claimIncludes, claimCheck} = require('express-openid-connect'); //include this middleware for ensure a protected route (requires authentication)
-
-const app = express();
-
-//the following code is directly copied from auth0.com under the management portal. It is to setup the router for the authentication schema.
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  secret: 'a long, randomly-generated string stored in env',
-  baseURL: 'http://localhost:3000',
-  clientID: 'HSJA1S6qiFjE8gem8UWix4xjZc8m5eyQ',
-  issuerBaseURL: 'https://dev-dzly2px62k6tkpb1.us.auth0.com',
-  clientSecret: 'aseryw83ydsbeo874tyi36gfa9673gviuyiuw3i4uyw37r',
+var guard = require('express-jwt-permissions')();
+var cors = require('cors');
+var port = process.env.PORT || 8080;
+var corsOptions = {
+    origin: "http://localhost:8080"
 };
+app.use(cors(corsOptions));
 
-app.use(auth(config));
-// auth router attaches /login, /logout, and /callback routes to the baseURL ... auth also creates a JWT using auth0
-//app.use(auth(config));
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+var jwtCheck = jwt({
+      secret: jwks.expressJwtSecret({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: 5,
+          jwksUri: 'https://dev-dzly2px62k6tkpb1.us.auth0.com/.well-known/jwks.json'
+    }),
+    audience: 'https://www.test-api.com',
+    issuer: 'https://dev-dzly2px62k6tkpb1.us.auth0.com/',
+    algorithms: ['RS256']
 });
 
-// require authentication for all protected and administrator routes... will redirect to login
-// because the user is forced to login for these paths, the oidc object (req.oidc) will have an accessToken property (JWT)
-// therefore, all protected and admin routes check the token for authorization
-app.use('/api/protected',requiresAuth());
-app.use('/api/admin',requiresAuth());
+app.use('/api/protected',jwtCheck);
+app.use('/api/admin',jwtCheck);
 
+app.get('/api/protected/challenges', function (req, res) {
+    res.json({challenge1: 'This is the first challenge',challenge2: 'this is another challenge'});
+});
 //sample public endpoint
 app.get('/api/public',(req,res)=>{
     console.log("/api/public was accessed")
@@ -286,5 +285,4 @@ function initDB(sql) {
 
     return connection;
 }
-
-module.exports = app;
+app.listen(port);
