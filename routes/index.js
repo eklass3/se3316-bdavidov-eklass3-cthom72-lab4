@@ -1,13 +1,61 @@
-const express = require('express');
+var express = require('express');
+var app = express();
+var jwt = require('express-jwt');
+var jwks = require('jwks-rsa');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const { body, check } = require('express-validator');
-
+const { body } = require('express-validator');
 const connection = initDB(mysql);
+var guard = require('express-jwt-permissions')();
+var cors = require('cors');
+var port = process.env.PORT || 8080;
+var corsOptions = {
+    origin: "http://localhost:8080"
+};
+app.use(cors(corsOptions));
 
+var jwtCheck = jwt({
+      secret: jwks.expressJwtSecret({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: 5,
+          jwksUri: 'https://dev-dzly2px62k6tkpb1.us.auth0.com/.well-known/jwks.json'
+    }),
+    audience: 'https://www.test-api.com',
+    issuer: 'https://dev-dzly2px62k6tkpb1.us.auth0.com/',
+    algorithms: ['RS256']
+});
+
+app.use('/api/protected',jwtCheck);
+app.use('/api/admin',jwtCheck);
+
+app.get('/api/protected/challenges', function (req, res) {
+    res.json({challenge1: 'This is the first challenge',challenge2: 'this is another challenge'});
+});
+//sample public endpoint
+app.get('/api/public',(req,res)=>{
+    console.log("/api/public was accessed")
+    res.send({
+        msg: 'You called the public endpoint!'
+    });
+})
+
+//sample protected endpoint (includes accessToken middleware)
+app.get('/api/protected',(req,res)=>{
+    res.send({
+        msg: "You called a protected endpoint!"
+    })
+})
+
+//sample administrative level protected endpoint
+app.get('/api/admin',(req,res) => {
+    res.send({
+        msg: "You called the administrator endpoint!"
+    })
+})
+
+//parser for JSON
 const jsonParser = bodyParser.json();
-
-const app = express();
 
     //Get genres enpoint. Backend requirement #1
     app.get('/api/genres', (req, res) => {
@@ -226,9 +274,9 @@ function initDB(sql) {
    
     let connection = sql.createConnection({
         host: 'localhost',
-        user: 'root',
-        password: 'password',//DB Password
-        database: 'music'
+        user: 'testing',
+        password: '',//DB Password
+        database: 'music',
     });
     
     connection.connect();
@@ -237,5 +285,4 @@ function initDB(sql) {
 
     return connection;
 }
-
-module.exports = app;
+app.listen(port);
