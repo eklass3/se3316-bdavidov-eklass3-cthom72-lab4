@@ -23,7 +23,7 @@ app.get("/challenges", async (req, res) => {
       console.log(error);
       if (error.response === 401) {
         res.status(401).json("Unauthorized to access data");
-      } else if (error.response.status === 403) {
+      } else if (error.response === 403) {
         res.status(403).json("Permission denied");
       } else {
         res.status(500).json("Whoops, something went wrong");
