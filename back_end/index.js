@@ -4,19 +4,19 @@ var oAuth = require("./middleware/oAuth");
 var port = process.env.PORT || 3001;
 const app = express();
 const cors = require('cors');
-const challengesAPIEndpoint = "http://localhost:8080/challenges";
+const jwtCheck = require("./api/api.js");
 app.use("/challenges", oAuth);
 
 app.get("/challenges", async (req, res) => {
   console.log('Challenges accessed..')
     try {
       const { access_token } = req.oauth;
-  
-      const response = await axios({
+      console.log(access_token);
+      /*const response = await axios({
         method: "get",
-        url: challengesAPIEndpoint,
+        url: 'http://localhost:3000/api',
         headers: { Authorization: `Bearer ${access_token}` },
-      });
+      });*/
       console.log('test')
       res.json(response.data);
     } catch (error) {
@@ -30,7 +30,9 @@ app.get("/challenges", async (req, res) => {
       }
     }
   });
-  
+  app.get('/api',jwtCheck,(req,res,next)=>{
+    next();
+  })
   app.listen(port, () => console.log("Started"));
 
   module.exports = app;
