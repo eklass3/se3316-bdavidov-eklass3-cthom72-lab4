@@ -19,6 +19,7 @@ const tokenEndpoint = "https://dev-dzly2px62k6tkpb1.us.auth0.com/oauth/token";
   axios.post(tokenEndpoint, params)
   .then(response => {
     req.oauth = response.data;
+    console.log('Token: ' + req.oauth);
     next();
   })
   .catch(err => {
