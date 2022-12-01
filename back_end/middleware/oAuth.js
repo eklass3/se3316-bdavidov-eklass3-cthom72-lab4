@@ -18,7 +18,7 @@ const tokenEndpoint = "https://dev-dzly2px62k6tkpb1.us.auth0.com/oauth/token";
       client_secret: 'Ini5aTh2-9x_C5PrjifHGVvpn9l2fGpDApoEKyqC3oemvOTw78Eyp7FD0I40iWZc',
       code: code,
       audience: 'https://www.test-api.com',
-      redirect_uri: 'http://localhost:3000/challenges'
+      redirect_uri: 'http://localhost:3000/home'
     })
   };
   axios.request(options).then(function (response) {

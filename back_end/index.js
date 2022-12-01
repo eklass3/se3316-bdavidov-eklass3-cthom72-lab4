@@ -5,9 +5,9 @@ var port = process.env.PORT || 3001;
 const app = express();
 const cors = require('cors');
 const {checkJwt, checkAdmin} = require("./api/api.js");
-app.use("/challenges", oAuth);
+app.use("/homeapi", oAuth);
 
-app.get("/challenges", async (req, res) => {
+app.get("/homeapi", async (req, res) => {
   var {access_token} = req.oauth;
   const response = await axios({
     method:"get",
