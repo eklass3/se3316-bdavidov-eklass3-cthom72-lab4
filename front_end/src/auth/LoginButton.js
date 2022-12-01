@@ -7,7 +7,7 @@ const LoginButton = () => {
     const scope = "read:test";
     const clientId = "HSJA1S6qiFjE8gem8UWix4xjZc8m5eyQ";
     const responseType = "code";
-    const redirectUri = "http://localhost:3000/challengesFront";
+    const redirectUri = "http://localhost:3000/home";
 
       const response = await fetch(
         `http://${domain}/authorize?` + 
