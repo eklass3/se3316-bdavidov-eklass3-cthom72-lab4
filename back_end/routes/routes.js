@@ -286,3 +286,5 @@ function initDB(sql) {
     return connection;
 }
 app.listen(port);
+
+module.exports = jwtCheck;
