@@ -4,7 +4,7 @@ const LoginButton = () => {
   const login = async () => {
     const domain = "dev-dzly2px62k6tkpb1.us.auth0.com";
     const audience = "https://www.test-api.com";
-    const scope = "read:test";
+    const scope = "is:admin";
     const clientId = "HSJA1S6qiFjE8gem8UWix4xjZc8m5eyQ";
     const responseType = "code";
     const redirectUri = "http://localhost:3000/home";

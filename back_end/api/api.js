@@ -8,5 +8,5 @@ const checkJwt = auth({
   audience: 'https://www.test-api.com',
   issuerBaseURL: `https://dev-dzly2px62k6tkpb1.us.auth0.com/`,
 });
-const checkAdmin = requiredScopes('read:test');
+const checkAdmin = requiredScopes('is:admin');
 module.exports =  {checkJwt, checkAdmin};

@@ -3,6 +3,7 @@ import LoginButton from "./auth/LoginButton";
 import LogoutButton from "./auth/LogoutButton";
 import Home from "./Home";
 import Test from "./Test";
+import AdminTest from "./AdminTest";
 
 import { Route } from "react-router-dom";
 
@@ -19,6 +20,7 @@ function App() {
         </span>
         <Route path="/home" component={Home} />
         <Route path="/test" component={Test} />
+        <Route path="/admintest" component = {AdminTest} />
       </div>
     </div>
   );
