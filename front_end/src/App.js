@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Dashboard</h1>
+        <h1>Dashboard 2</h1>
       </header>
       <div className="App-body">
         <span>
