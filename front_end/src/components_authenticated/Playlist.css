@@ -1,0 +1,35 @@
+form {
+    margin: 20px 0 0 300px;
+}
+
+.item span {
+    color: white;
+    font-size: large;
+    text-align: center;
+    margin-left: 10px;
+}
+
+input {
+    margin-left: 2em;
+}
+
+span input {
+    display: inline-block;
+}
+
+.item {
+    display: flex;
+    margin-top: 20px;
+}
+
+#add-button {
+    color: rgb(5, 71, 5);
+    font-size: large;
+    width: 10em;
+    align-items: center;
+    height: 40px;
+    transition: all 350ms;
+    margin-top: 30px;
+    border-radius: 20px;
+    text-decoration: none;
+}
