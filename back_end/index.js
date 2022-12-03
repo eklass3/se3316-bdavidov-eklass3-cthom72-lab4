@@ -381,7 +381,7 @@ function initDB(sql) {
    
     let connection = sql.createConnection({
         host: 'localhost',
-        user: 'root',
+        user: 'testing',
         password: '',//DB Password
         database: 'music',
     });
@@ -392,8 +392,6 @@ function initDB(sql) {
 
     return connection;
 }
-
-app.get("/challenges", async (req, res) => {
 
 app.get("/auth", async (req, res) => {
 
