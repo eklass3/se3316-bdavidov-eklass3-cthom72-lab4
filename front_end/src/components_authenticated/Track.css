@@ -1,0 +1,20 @@
+.trackProperty {
+    display: inline-block;
+    color: white;
+    font-size: large;
+    padding-right: 150px;
+}
+
+.expandButton {
+    color: rgb(5, 71, 5);
+    align-items: center;
+    transition: all 350ms;
+    border-radius: 20px;
+    text-decoration: none;
+    background-color: white;
+}
+
+.track {
+    margin-left: 275px;
+    padding-bottom: 20px;
+}
