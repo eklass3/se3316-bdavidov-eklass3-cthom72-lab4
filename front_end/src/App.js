@@ -1,6 +1,7 @@
 import "./App.css";
 import LoginButton from "./auth/LoginButton";
 import LogoutButton from "./auth/LogoutButton";
+
 import Sidebar from "./components_authenticated/Sidebar"
 import Search from "./components_authenticated/Search"
 import Playlist from "./components_authenticated/Playlist"
@@ -8,7 +9,6 @@ import TrackHolder from "./components_authenticated/TrackHolder";
 import PlaylistContainer from "./components_authenticated/PlaylistContainer";
 import Library from "./components_authenticated/Library";
 import PlaylistData from "./components_authenticated/PlaylistData";
-
 
 import { Route } from "react-router-dom";
 

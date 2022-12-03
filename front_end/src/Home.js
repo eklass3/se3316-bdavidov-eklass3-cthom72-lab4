@@ -5,10 +5,9 @@ import queryString from "query-string";
 
 const Home = ({ location }) => {
   const { code } = queryString.parse(location.search);
-  const [homeData, setHomeData] = useState("none");
   
   useEffect(() => {
-    fetch(`/homeapi?code=${code}`, {
+    fetch(`/auth?code=${code}`, {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -17,16 +16,13 @@ const Home = ({ location }) => {
     })
     .then(res => res.json())
     .then(res => {
-      setHomeData(JSON.stringify(res))
-      console.log("RES: " + res);
+      sessionStorage.setItem("jwt", res);
+      console.log(sessionStorage.getItem("jwt"));
     })
   }, [code]);
-
   return (
-    <div className="Home-body">
-      <h3>Homes</h3>
-      <h5 className="Content">{homeData}</h5>
-    </div>
+    <>
+    </>
   );
 };
 

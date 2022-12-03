@@ -1,10 +1,9 @@
-
 import "./Home.css";
 import {useState, useEffect} from "react";
-function Test(){
+function AdminTest(){
   const [header, setHeader] = useState("none");
   useEffect(() => {
-    fetch(`/protected`, {
+    fetch(`/admin`, {
       method: 'GET',
       headers: {
        Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
@@ -17,10 +16,10 @@ function Test(){
   },[]);
   return (
     <div className="Home-body">
-          <h3>Protected Test</h3>
+          <h3>Admin Test</h3>
           <h2>{header}</h2>
     </div>
   );
 }
 
-export default Test;
+export default AdminTest;
