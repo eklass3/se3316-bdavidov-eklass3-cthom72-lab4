@@ -22,8 +22,8 @@ const tokenEndpoint = "https://dev-dzly2px62k6tkpb1.us.auth0.com/oauth/token";
     })
   };
   axios.request(options).then(function (response) {
-    console.log('test');
-    console.log(response.data);
+    //console.log('test');
+    //console.log(response.data);
     req.oauth=response.data;
     next();
   }).catch(function (error) {

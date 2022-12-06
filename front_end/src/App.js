@@ -9,6 +9,7 @@ import TrackHolder from "./components_authenticated/TrackHolder";
 import PlaylistContainer from "./components_authenticated/PlaylistContainer";
 import Library from "./components_authenticated/Library";
 import PlaylistData from "./components_authenticated/PlaylistData";
+import Test from "./Test";
 
 import { Route } from "react-router-dom";
 
@@ -31,6 +32,7 @@ function App() {
       <Route path="/home/library" component={Library}/>
       <Route path="/home/playlist" exact component={Playlist}/>
       <Route path="/home/playlist/id" component={PlaylistData}/>
+      <Route path="/test" component={Test}/>
     </div>
   );
 }

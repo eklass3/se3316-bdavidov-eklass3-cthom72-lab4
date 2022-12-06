@@ -15,6 +15,13 @@ app.use("/auth", oAuth);
 app.use("/api/protected",checkJwt);
 app.use("/api/admin",checkJwt);
 
+//retrieves the user email from the jwt of the session and checks to see if the email is in the database. If it is not, then this is a new user and the email is added accordingly.
+app.use("/api/protected/profile", (req,res) => {
+    //retrieve the user email from the auth attribute
+    let user_email = req.auth.payload.useremail;
+    console.log(user_email);
+});
+
 //require the admin path to also check for an "is:admin" component of the JWT to authorize that the user is an administrator
 app.use("/api/admin",checkAdmin);
 
@@ -403,9 +410,8 @@ function initDB(sql) {
 }
 
 app.get("/auth", async (req, res) => {
-
   var {access_token} = req.oauth;
-  console.log("Token: " + req.oauth.access_token);
+  //console.log("Token: " + req.oauth.access_token);
   res.json(access_token);
 });
   app.get('/protected',checkJwt,(req,res)=>{
