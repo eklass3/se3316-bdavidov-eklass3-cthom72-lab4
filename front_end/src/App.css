@@ -38,7 +38,7 @@
 }
 
 .App-body {
-  background-color: #333945;
+  background-color: #EEEEEE;
   min-height: 10vh;
   display: flex;
   flex-direction: column;
@@ -49,7 +49,7 @@
 }
 
 .Login-button {
-  background-color: #408c43; /* Green */
+  background-color: #333333;
   color: rgb(255, 254, 254);
   padding: 20px;
   margin: 10px;
@@ -57,4 +57,15 @@
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+  border-radius: 20px;
+}
+
+.Login-button:active{
+  background-color: #c3c3c3;
+}
+
+.Login-button:hover{
+  transform: scale(1.05);
+  background-color: #454545;
+
 }

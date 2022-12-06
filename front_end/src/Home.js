@@ -18,11 +18,13 @@ const Home = ({ location }) => {
     .then(res => {
       sessionStorage.setItem("jwt", res);
       console.log(sessionStorage.getItem("jwt"));
-    })
+    });
   }, [code]);
   return (
-    <>
-    </>
+    <div className="Home-body">
+          <h3>The Jwt</h3>
+          <h2>{sessionStorage.getItem("jwt")}</h2>
+    </div>
   );
 };
 

@@ -1,8 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {Link} from 'react-router-dom'
 import './Sidebar.css'
 
-const Sidebar = () => {
+import queryString from "query-string";
+
+const Sidebar = ({ location }) => {
+    const { code } = queryString.parse(location.search);
+
+    //fetches the token and stores it in a session container
+    useEffect(() => {
+        fetch(`/auth?code=${code}`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        }
+        })
+        .then(res => res.json())
+        .then(res => {
+            sessionStorage.setItem("jwt", res);
+            console.log(sessionStorage.getItem("jwt"));
+            fetch(`/api/protected/profile`, {
+                method: 'GET',
+                headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
+                }
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+            })
+        });
+    }, [code]);
+
     return(
     <div className="sidebar">
         <nav>

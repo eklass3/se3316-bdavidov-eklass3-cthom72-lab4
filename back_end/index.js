@@ -7,7 +7,23 @@ var port = process.env.PORT || 3001;
 const app = express();
 const cors = require('cors');
 const {checkJwt, checkAdmin} = require("./api/api.js");
+
+//use oAuth middleware to return a JWT to the front end (which gets stored in a session container)
 app.use("/auth", oAuth);
+
+//require the protected and admin paths to check for the JWT 
+app.use("/api/protected",checkJwt);
+app.use("/api/admin",checkJwt);
+
+//retrieves the user email from the jwt of the session and checks to see if the email is in the database. If it is not, then this is a new user and the email is added accordingly.
+app.use("/api/protected/profile", (req,res) => {
+    //retrieve the user email from the auth attribute
+    let user_email = req.auth.payload.useremail;
+    console.log(user_email);
+});
+
+//require the admin path to also check for an "is:admin" component of the JWT to authorize that the user is an administrator
+app.use("/api/admin",checkAdmin);
 
 const mysql = require('mysql');
 
@@ -17,7 +33,7 @@ const connection = initDB(mysql);
 const jsonParser = bodyParser.json();
 
     //Get genres enpoint. Backend requirement #1
-    app.get('/api/genres', (req, res) => {
+    app.get('/api/public/genres', (req, res) => {
         connection.query('SELECT genre_id, title, parent FROM genres', function(error, results, fields) {
             if (error) throw error;
         res.send(JSON.stringify(results));
@@ -25,7 +41,7 @@ const jsonParser = bodyParser.json();
     });
 
     //Get artists details enpoint. Backend requirement #2
-    app.get('/api/artists/:id', (req, res) => {
+    app.get('/api/public/artists/:id', (req, res) => {
         let artist_id = req.params.id;
         if (isNumeric(artist_id)) {//Santization
             connection.query('SELECT artist_name, artist_members, artist_active_year_begin, artist_active_year_end, artist_images, artist_wikipedia_page FROM artists WHERE artist_id = ?',[artist_id], function(error, results, fields) {
@@ -38,7 +54,7 @@ const jsonParser = bodyParser.json();
     });
 
     //Get track details by id enpoint. Backend requirement #3. Sanitized through SQL param input.
-    app.get('/api/tracks/:id', (req, res) => {
+    app.get('/api/public/tracks/:id', (req, res) => {
         let track_id = req.params.id;
         if (isNumeric(track_id)) {//Santization
             connection.query('SELECT album_id, track_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration, track_genres, track_number, track_title FROM tracks WHERE track_id = ?', [track_id], function(error, results, fields) {
@@ -51,7 +67,7 @@ const jsonParser = bodyParser.json();
     });
 
     //Get track id by search enpoint. Backend requirement #4. Sanitized through SQL param input.
-    app.get('/api/tracks', (req, res) => {
+    app.get('/api/public/tracks', (req, res) => {
         let search = req.query.track_title;
     
         connection.query('SELECT track_id FROM tracks WHERE track_title LIKE ? OR album_title LIKE ? LIMIT 10;',['%' + search + '%', '%' + search + '%'], function(error, results, fields) {
@@ -61,7 +77,7 @@ const jsonParser = bodyParser.json();
     });
 
     //Get artist id by search enpoint. Backend requirement #5. Sanitized through SQL param input.
-    app.get('/api/artists', (req, res) => {
+    app.get('/api/public/artists', (req, res) => {
         let search = req.query.artist_name;
         console.log(search);
 
@@ -80,7 +96,7 @@ const jsonParser = bodyParser.json();
         "creator_id":""
     }
     */
-    app.post('/api/lists', jsonParser, (req, res) => {
+    app.post('/api/protected/lists', jsonParser, (req, res) => {
     const body = req.body;
         console.log(body);
     
@@ -100,7 +116,7 @@ const jsonParser = bodyParser.json();
     {"track_id": 2},
     {"track_id": 21}]}
     */
-    app.post('/api/lists/:list', jsonParser, (req, res) => {
+    app.post('/api/protected/lists/:list', jsonParser, (req, res) => {
         let list_name = req.params.list;
         let track_ids = req.body.track_ids;
 
@@ -131,7 +147,7 @@ const jsonParser = bodyParser.json();
     });
 
     //Get list of track ids in a list. Backend requirement #8. Sanitized through SQL param input.
-    app.get('/api/lists/tracks/:list', jsonParser, (req, res) => {
+    app.get('/api/public/lists/tracks/:list', jsonParser, (req, res) => {
         let list_name = req.params.list;
 
         console.log(list_name);
@@ -144,7 +160,7 @@ const jsonParser = bodyParser.json();
     });
 
     //Deletes a list. Backend requirement #9. Sanitized through SQL param input.
-    app.delete('/api/lists/:list', jsonParser, (req, res) => {
+    app.delete('/api/protected/lists/:list', jsonParser, (req, res) => {
         let list_name = req.params.list;
     
         connection.query('SELECT * FROM lists WHERE list_name = ?',[list_name], function(error, results, fields) {
@@ -165,7 +181,7 @@ const jsonParser = bodyParser.json();
     });
 
     //Get list details. Backend requirement #10
-    app.get('/api/lists/:public', jsonParser, (req, res) => {
+    app.get('/api/public/lists/:public', jsonParser, (req, res) => {
         let public = req.params.public;
 
         if (public === "")
@@ -232,7 +248,7 @@ const jsonParser = bodyParser.json();
         "public": 0
     }
     */
-    app.put('/api/lists', jsonParser, (req, res) => {
+    app.put('/api/protected/lists', jsonParser, (req, res) => {
         const body = req.body;
         console.log(body);
     
@@ -324,7 +340,7 @@ const jsonParser = bodyParser.json();
       "account_id": ""
     }
     */
-    app.post('/api/reviews', jsonParser, (req, res) => {
+    app.post('/api/protected/reviews', jsonParser, (req, res) => {
         const body = req.body;
         console.log(body);
     
@@ -346,7 +362,7 @@ const jsonParser = bodyParser.json();
       "hidden": 0
     }
     */
-    app.put('/api/reviews', jsonParser, (req, res) => {
+    app.put('/api/protected/reviews', jsonParser, (req, res) => {
         const body = req.body;
         console.log(body);
     
@@ -381,7 +397,7 @@ function initDB(sql) {
    
     let connection = sql.createConnection({
         host: 'localhost',
-        user: 'root',
+        user: 'testing',
         password: '',//DB Password
         database: 'music',
     });
@@ -393,17 +409,9 @@ function initDB(sql) {
     return connection;
 }
 
-app.get("/challenges", async (req, res) => {
-
 app.get("/auth", async (req, res) => {
-
   var {access_token} = req.oauth;
-  /*const response = await axios({
-    method:"get",
-    url:'http://localhost:3000/protected',
-    headers: { Authorization: `Bearer ${access_token}` },
-  });*/
-  console.log("Token: " + req.oauth.access_token);
+  //console.log("Token: " + req.oauth.access_token);
   res.json(access_token);
 });
   app.get('/protected',checkJwt,(req,res)=>{
