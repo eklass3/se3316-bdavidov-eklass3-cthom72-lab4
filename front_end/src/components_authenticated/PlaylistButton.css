@@ -1,0 +1,12 @@
+.playlist {
+    background: #181818;
+    color: white;
+    width: 150px;
+    height: 100px;
+    margin-right: 100px;
+}
+
+.playlistProperty {
+    display: flex;
+    padding-bottom: 20px;
+}

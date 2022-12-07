@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const cors = require("cors")
 
+//Connect express.
+const port = process.env.PORT || 3000;
+app.listen(port, ()=> console.log(`Listening on port ${port}...`));
+
 let backend = require('./back_end/index');
 
 var corsOptions = {
@@ -22,7 +26,3 @@ app.get('/*', (req,res)=>{
     res.sendFile('index.html',{ root: './front_end/build/'});
 });
 
-
-//Connect express.
-const port = process.env.PORT || 3000;
-app.listen(port, ()=> console.log(`Listening on port ${port}...`));

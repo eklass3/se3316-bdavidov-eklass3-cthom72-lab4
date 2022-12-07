@@ -7,7 +7,7 @@ const LoginButton = () => {
     const scope = "is:admin";
     const clientId = "HSJA1S6qiFjE8gem8UWix4xjZc8m5eyQ";
     const responseType = "code";
-    const redirectUri = "http://localhost:3000/home";
+    const redirectUri = "http://localhost:3000/home/authenticated";
 
       const response = await fetch(
         `http://${domain}/authorize?` + 

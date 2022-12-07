@@ -1,0 +1,21 @@
+.sidebar {
+    background-color: rgba(4, 4, 4);
+    position: fixed;
+    position: sticky;
+    width: 100%;
+}
+
+.sidebar-button {
+    color: rgb(5, 71, 5);
+    font-size: large;
+    width: 90%;
+    align-items: center;
+    height: 40px;
+    transition: all 350ms;
+    border-radius: 20px;
+    text-decoration: none;
+}
+
+h1 {
+    color: white;
+}
