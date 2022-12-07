@@ -27,7 +27,6 @@ const tokenEndpoint = "https://dev-dzly2px62k6tkpb1.us.auth0.com/oauth/token";
     req.oauth=response.data;
     next();
   }).catch(function (error) {
-    console.error(error);
   });
 }
 

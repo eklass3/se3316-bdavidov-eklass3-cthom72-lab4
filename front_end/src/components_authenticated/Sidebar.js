@@ -32,7 +32,7 @@ const Sidebar = ({ location }) => {
             })
         });
         console.log('test')
-    }, []);
+    }, [code]);
 
     return(
     <div className="sidebar">
