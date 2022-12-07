@@ -17,7 +17,9 @@ function TrackDetails(props) {
             <button style={{width: 500, height: 100, backgroundColor: 'gray', borderRadius: 15}} onClick={()=>setCount(count*-1)}>
             <p>Title: {props.track.track_title} | Artist: {props.track.artist_name}</p>
             <p>Language: {props.track.track_language_code}, Play-time: {props.track.track_duration} Year: {props.track.track_date_recorded}</p>
-            <p><a href={ytLink} target="_blank">Watch on YouTube!</a></p>
+            <div style={{backgroundColor: 'green', borderRadius: 15}}>
+                <p><a href={ytLink} target="_blank">Play</a></p>
+            </div>
             </button>
         )
     }

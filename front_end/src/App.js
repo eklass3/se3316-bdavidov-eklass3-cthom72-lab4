@@ -90,6 +90,10 @@ function onSearchChange(event) {
                 <PlaylistDetails playlist={playlist}/>
               )
             })}
+
+            <p style={{color: 'black'}}>View our Privacy Policy <a target="_blank" href="https://docs.google.com/document/d/185wpPyn-yYgTk0jM1wedR7XnTRMPpiRSYPGkB5xdEmY/edit?usp=sharing">here.</a></p>
+            <p style={{color: 'black'}}>View our Acceptable Use Policy <a target="_blank" href="https://docs.google.com/document/d/1c5Zeu4AZdyc1UYLKYbTsfP-IwXRqBClBpEWbeKL1OHI/edit?usp=sharing">here.</a></p>
+            <p style={{color: 'black'}}>View our DMCA Take Down Policy <a target="_blank" href="https://docs.google.com/document/d/1kABt3cbdyhT62ElTbuTFtq3i1ucOKBDRHBwcfJR-bFY/edit?usp=sharing">here.</a></p>
         </span>
       </div>
       <Route path="/home" component={Sidebar} />

@@ -398,7 +398,7 @@ function initDB(sql) {
     let connection = sql.createConnection({
         host: 'localhost',
         user: 'root',
-        password: 'root',//DB Password
+        password: 'K983pj*B',//DB Password
         database: 'music',
     });
     
