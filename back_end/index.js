@@ -271,14 +271,14 @@ const jsonParser = bodyParser.json();
       "active": 1
     }
     */
-    app.post('/api/accounts', jsonParser, (req, res) => {
+    app.post('/api/protected/accounts', jsonParser, (req, res) => {
         const body = req.body;
         console.log(body);
-    
-        connection.query('INSERT INTO accounts (account_id, account_name, admin, active) VALUES (?, ?, ?, ?)',[body.account_id, body.account_name, body.admin, body.active], function(error, results, fields) {
+        connection.query('INSERT INTO accounts (account_id, account_name, admin, active) VALUES (?, ?, ?, ?)',[req.auth.payload.useremail, 'name', '0', '0'], function(error, results, fields) {
             if (error) {
                 res.status(400).send(error.sqlMessage);
             } else {
+                console.log('Successfully added a new account');
                 res.status(201).send("Successfully created new account! " + JSON.stringify(body));
             }
         });
@@ -411,7 +411,7 @@ function initDB(sql) {
 
 app.get("/auth", async (req, res) => {
   var {access_token} = req.oauth;
-  //console.log("Token: " + req.oauth.access_token);
+  console.log("Token: " + req.oauth.access_token);
   res.json(access_token);
 });
   app.get('/protected',checkJwt,(req,res)=>{

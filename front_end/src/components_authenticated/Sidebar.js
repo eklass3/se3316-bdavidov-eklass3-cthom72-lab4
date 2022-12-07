@@ -20,8 +20,8 @@ const Sidebar = ({ location }) => {
         .then(res => {
             sessionStorage.setItem("jwt", res);
             console.log(sessionStorage.getItem("jwt"));
-            fetch(`/api/protected/profile`, {
-                method: 'GET',
+            fetch(`/api/protected/accounts`, {
+                method: 'POST',
                 headers: {
                 Authorization: `Bearer ${sessionStorage.getItem("jwt")}`
                 }
