@@ -1,10 +1,10 @@
 import React from "react";
 import TrackHolder from './TrackHolder'
 
-const PlaylistData = () => {
+const PlaylistData = (params) => {
     return (
         <div className="playlist-data">
-            <h1>Playlist Name</h1>
+            <h1>{params.playlistName}</h1>
             <button>Delete</button>
             <TrackHolder/>
         </div>

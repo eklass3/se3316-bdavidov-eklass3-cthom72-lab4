@@ -2,12 +2,18 @@ import React from 'react';
 import {useEffect, useState} from 'react';
 import PlaylistContainer from './PlaylistContainer'
 
-const Library = (id) => {
+const ROOT = "http://localhost:3000";
+
+const Library = () => {
     const [lists, setLists] = useState([])
     useEffect(() => {
-        fetch(`api/protected/lists/${id}`)
+        fetch(`${ROOT}/api/protected/userLists`, {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${sessionStorage.getItem("jwt")}`}
+        })
         .then(res => res.json())
         .then(data => {
+            console.log(data)
             setLists(data)
         })
     })

@@ -4,7 +4,7 @@ import "./PlaylistButton.css"
 
 const PlaylistButton = (props) => {
     return(
-    <Link to={`/home/playlist/${props.name}`}>
+    <Link to={`/home/playlist/${props.name}`} params={{playlistName: props.name}}>
     <button className="playlist">
         <div className='playlistProperty'><span>Name: ${props.name}</span></div>
         <div className='playlistProperty'><span>By: ${props.by}</span></div>
