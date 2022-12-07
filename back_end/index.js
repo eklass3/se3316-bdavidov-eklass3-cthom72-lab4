@@ -25,7 +25,7 @@ app.use("/api/protected/profile", (req,res) => {
 //require the admin path to also check for an "is:admin" component of the JWT to authorize that the user is an administrator
 app.use("/api/admin",checkAdmin);
 
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 const connection = initDB(mysql);
 
@@ -66,11 +66,11 @@ const jsonParser = bodyParser.json();
         }
     });
 
-    //Get track id by search enpoint. Backend requirement #4. Sanitized through SQL param input.
+    //Get track id by search enpoint. Uses soft search. Demo with "Friway -> Freeway" Backend requirement #4. Sanitized through SQL param input.
     app.get('/api/public/tracks', (req, res) => {
-        let search = req.query.track_title;
+        let search = req.query.search;
     
-        connection.query('SELECT track_id FROM tracks WHERE track_title LIKE ? OR album_title LIKE ? LIMIT 10;',['%' + search + '%', '%' + search + '%'], function(error, results, fields) {
+        connection.query('SELECT track_id, track_title, artist_name, track_duration, track_date_recorded, track_language_code FROM tracks WHERE track_title LIKE ? OR album_title LIKE ? OR SOUNDEX(track_title) LIKE SOUNDEX(?) OR SOUNDEX(album_title) LIKE SOUNDEX(?) LIMIT 10;',['%' + search + '%', '%' + search + '%', search, search], function(error, results, fields) {
             if (error) throw error;
         res.send(JSON.stringify(results));
         });
@@ -397,8 +397,8 @@ function initDB(sql) {
    
     let connection = sql.createConnection({
         host: 'localhost',
-        user: 'testing',
-        password: '',//DB Password
+        user: 'root',
+        password: 'K983pj*B',//DB Password
         database: 'music',
     });
     
