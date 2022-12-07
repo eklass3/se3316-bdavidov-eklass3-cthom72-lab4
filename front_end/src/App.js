@@ -17,7 +17,6 @@ import Button from "./components_unauthenticated/Button";
 import { useEffect, useState } from "react";
 import TrackDetails from "./components_unauthenticated/TrackDetails";
 import PlaylistDetails from "./components_unauthenticated/PlaylistDetails";
-import queryString from "query-string";
 
 let search = "";
 
@@ -98,7 +97,7 @@ function onSearchChange(event) {
       <Route path="/home/search" component={Search}/>
       <Route path="/home/search" component={TrackHolder}/>
       <Route path="/home/search" component={PlaylistContainer}/>
-      <Route path="/home/authenticated/library" component={Library}/>
+      <Route path="/home/authenticated/library" id='hfasjfkhdakfshfkdfjaks'component={Library}/>
       <Route path="/home/authenticated/playlist" component={Playlist}/>
       <Route path="/home/playlist/id" component={PlaylistData}/>
       <Route path="/test" component={Test}/>
