@@ -98,7 +98,7 @@ const jsonParser = bodyParser.json();
     */
     app.post('/api/protected/lists', jsonParser, (req, res) => {
     const body = req.body;
-        console.log(body);
+        console.log("Body" + body);
     
         connection.query('INSERT INTO lists (list_name, date_edited, description, public, creator_id) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?)',[body.list_name, body.description, body.public, body.creator_id], function(error, results, fields) {
             if (error) {
@@ -180,6 +180,19 @@ const jsonParser = bodyParser.json();
         });
     });
 
+    app.get('api/protected/lists/:creator_id'), jsonParser, (req,res) => {
+        let creator_id = req.params.creator_id;
+
+        connection.query(`SELECT * FROM lists WHERE creator_id=${creator_id}`, function(error, results) {
+            if (error) throw error;
+            if(results.length == 0) {
+                res.send("List is empty")
+            } else {
+                res.send(JSON.stringify(results));
+            }
+        })
+    }
+
     //Get list details. Backend requirement #10
     app.get('/api/public/lists/:public', jsonParser, (req, res) => {
         let public = req.params.public;
@@ -222,7 +235,6 @@ const jsonParser = bodyParser.json();
                         let a = tdn.track_duration.split(':');
                         let totalSec = parseInt(a[0])*60 + parseInt(a[1]);
                         let track_duration = totalSec;
-                        console.log(totalSec);
                         //If track is in list, add to toal list duration.
                         if (tcn.list_name === tdn.list_name) {
                             tcn.total_duration += track_duration;

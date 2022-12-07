@@ -12,8 +12,7 @@ const Playlist = () => {
         fetch(`/api/protected/lists`, {
             method: 'POST',
             headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("jwt")}`,
-            'Content-type': 'application/json'
+            'Content-type': 'application/json',
             },
             body: {
                 description: description,
