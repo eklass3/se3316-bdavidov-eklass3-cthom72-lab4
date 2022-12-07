@@ -1,20 +1,22 @@
 import React, {useState, useEffect } from 'react';
 import TrackDetails from "./TrackDetails";
 
+const ROOT = 'http://localhost:3000';
+
 function PlaylistDetails(props) {
 
     const [count, setCount] = useState(-1);
     const [tracks, setTracks] = useState([]);
 
     useEffect(()=>{
-        const query = `http://localhost:3000/api/public/lists/tracks/${props.playlist.list_name}`;
+        const query = `${ROOT}/api/public/lists/tracks/${props.playlist.list_name}`;
         fetch(query)
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
 
             for (let i = 0; i < data.length; i++) {
-                const query2 = `http://localhost:3000/api/public/tracks/${data[i].track_id}`;
+                const query2 = `${ROOT}/api/public/tracks/${data[i].track_id}`;
                 fetch(query2)
                 .then((response) => response.json())
                 .then((track_details) => {

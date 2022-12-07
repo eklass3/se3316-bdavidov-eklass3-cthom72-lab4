@@ -20,6 +20,8 @@ import PlaylistDetails from "./components_unauthenticated/PlaylistDetails";
 
 let search = "";
 
+const ROOT = "http://localhost:3000";
+
 function App() {
 
   const [searchResults, setSearchResults] = useState([]);
@@ -27,7 +29,7 @@ function App() {
 
 function onSearch() {
   console.log("Searching");
-  const query = `http://localhost:3000/api/public/tracks?search=${search}`;
+  const query = `${ROOT}/api/public/tracks?search=${search}`;
   fetch(query)
   .then((response) => response.json())
   .then((data) => {
@@ -41,7 +43,7 @@ function onSearch() {
 
 useEffect(()=>{
   console.log("Searching");
-  const query = `http://localhost:3000/api/public/lists/0`;
+  const query = `${ROOT}/api/public/lists/0`;
   fetch(query)
   .then((response) => response.json())
   .then((data) => {
