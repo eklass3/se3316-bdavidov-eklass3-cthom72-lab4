@@ -10,7 +10,11 @@ const {checkJwt, checkAdmin} = require("./api/api.js");
 
 //use oAuth middleware to return a JWT to the front end (which gets stored in a session container)
 app.use("/auth", oAuth);
+// parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
+// parse application/json
+app.use(express.json());
 //require the protected and admin paths to check for the JWT 
 app.use("/api/protected",checkJwt);
 app.use("/api/admin",checkJwt);
@@ -96,11 +100,10 @@ const jsonParser = bodyParser.json();
         "creator_id":""
     }
     */
-    app.post('/api/protected/lists', jsonParser, (req, res) => {
+    app.post('/api/protected/lists', (req, res) => {
     const body = req.body;
-        console.log("Body" + body);
-    
-        connection.query('INSERT INTO lists (list_name, date_edited, description, public, creator_id) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?)',[body.list_name, body.description, body.public, body.creator_id], function(error, results, fields) {
+    console.log("Body " + body);
+        connection.query('INSERT INTO lists (list_name, date_edited, description, public, creator_id) VALUES (?, CURRENT_TIMESTAMP(), ?, ?, ?)',[body.list_name, body.description, body.public, req.auth.payload.useremail], function(error, results, fields) {
             if (error) {
                 res.status(400).send(error.sqlMessage);
             } else {
@@ -285,7 +288,7 @@ const jsonParser = bodyParser.json();
     */
     app.post('/api/protected/accounts', jsonParser, (req, res) => {
         const body = req.body;
-        console.log(body);
+        //console.log(body);
         connection.query('INSERT INTO accounts (account_id, account_name, admin, active) VALUES (?, ?, ?, ?)',[req.auth.payload.useremail, 'name', '0', '0'], function(error, results, fields) {
             if (error) {
                 res.status(400).send(error.sqlMessage);

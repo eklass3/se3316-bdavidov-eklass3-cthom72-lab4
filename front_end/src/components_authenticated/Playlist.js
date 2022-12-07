@@ -13,12 +13,14 @@ const Playlist = () => {
             method: 'POST',
             headers: {
             'Content-type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization':`Bearer ${sessionStorage.getItem("jwt")}`,
             },
-            body: {
+            body: JSON.stringify({
                 description: description,
                 public: check,
                 list_name: playlistName,
-            }
+            }),
         })
         .then(res => res.json())
         .then(res => {
