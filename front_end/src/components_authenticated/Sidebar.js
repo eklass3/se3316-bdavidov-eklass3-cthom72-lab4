@@ -31,15 +31,15 @@ const Sidebar = ({ location }) => {
                 console.log(res);
             })
         });
-    }, [code]);
+        console.log('test')
+    }, []);
 
     return(
     <div className="sidebar">
         <nav>
             <h1>Navigation</h1>
-            <Link to='/home/search'><button className="sidebar-button"><span>Search</span></button></Link>
-            <Link to='/home/library'><button className="sidebar-button"><span>Your Library</span></button></Link>
-            <Link to='/home/playlist'><button className="sidebar-button"><span>Create Playlist</span></button></Link>
+            <Link to={('/home/authenticated/library?code=' + `${code}`)}><button className="sidebar-button"><span>Your Library</span></button></Link>
+            <Link to={('/home/authenticated/playlist?code=' + `${code}`)}><button className="sidebar-button"><span>Create Playlist</span></button></Link>
         </nav>
     </div>
     )
